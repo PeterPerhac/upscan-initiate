@@ -3,8 +3,8 @@ package utils
 import config.ServiceConfiguration
 import play.api.Logger
 import play.api.http.HeaderNames
-import play.api.mvc.{Request, Result}
 import play.api.mvc.Results.Forbidden
+import play.api.mvc.{Request, Result}
 
 import scala.concurrent.Future
 
@@ -19,8 +19,8 @@ trait UserAgentFilter {
     request.headers.get(HeaderNames.USER_AGENT) match {
       case Some(userAgent) if allowedUserAgent(userAgent) =>
         block(request, userAgent)
-      case userAgent =>
-        Logger.warn(s"Invalid User-Agent: [$userAgent].")
+      case optUserAgent =>
+        Logger.warn(s"Invalid User-Agent: [${optUserAgent.getOrElse("<none>")}].")
 
         Future.successful(
           Forbidden(
